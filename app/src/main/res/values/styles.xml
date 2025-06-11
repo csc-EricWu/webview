@@ -5,5 +5,10 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
-
+    <!-- 新增：启动图主题 -->
+    <style name="AppTheme.Splash" parent="android:Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">@mipmap/launch_image</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>

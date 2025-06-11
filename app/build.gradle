@@ -5,15 +5,24 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.google.webview"
+        applicationId project.hasProperty('applicationId') ? project.property('applicationId') : 'com.google.webview'
         minSdkVersion 23 // 可以兼容到 Android 6.0（覆盖率高）
         targetSdk 34
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_FILE") ?: "../keystore/my-release-key.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD") ?: "888888"
+            keyAlias System.getenv("KEY_ALIAS") ?: "web-alias"
+            keyPassword System.getenv("KEY_PASSWORD") ?: "888888"
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release // 应用 release 签名配置
+            minifyEnabled true                  // 启用代码压缩
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

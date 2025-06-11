@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--    android:theme="@style/AppTheme"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,15 +15,33 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!-- 启动页
         <activity
-            android:configChanges="orientation|screenSize"
-            android:name="com.example.app.MainActivity"
-            android:exported="true">
+            android:name="com.example.app.SplashActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.Splash"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.app.MainActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize" />
+        -->
+        <!-- 不要启动页 -->
 
-    </application>
-</manifest>
+          <activity
+              android:name="com.example.app.MainActivity"
+              android:configChanges="orientation|screenSize"
+              android:exported="true">
+              <intent-filter>
+                  <action android:name="android.intent.action.MAIN" />
+                  <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+          </activity>
+
+      </application>
+  </manifest>
