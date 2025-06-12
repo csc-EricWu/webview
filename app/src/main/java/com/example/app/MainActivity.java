@@ -9,6 +9,12 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends Activity {
 
@@ -24,6 +30,7 @@ public class MainActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        exitTaskThreeMonthsAfter();
 
         networkReceiver = new NetworkReceiver();
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -40,7 +47,7 @@ public class MainActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
-        
+        webSettings.setSaveFormData(true);
 //        webSettings.setLoadWithOverviewMode(true);
 //        webSettings.setUseWideViewPort(true);
 //        webSettings.setBuiltInZoomControls(true);
@@ -75,6 +82,26 @@ public class MainActivity extends Activity {
 //         mWebView.loadUrl("file:///android_asset/index.html");
 
 
+    }
+    private void exitTaskThreeMonthsAfter() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        try {
+//            Toast.makeText(this, BuildConfig.BUILD_DATE, Toast.LENGTH_SHORT).show();
+            Date baseDate = formatter.parse(BuildConfig.BUILD_DATE); // 使用构建时的日期
+            if (baseDate == null) return;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(baseDate);
+            calendar.add(Calendar.MONTH, 2); // 加 2 个月
+            Date futureDate = calendar.getTime();
+            Date now = new Date();
+            if (now.after(futureDate)) {
+                // 关闭应用
+                finishAffinity(); // 关闭所有 Activity
+                System.exit(0);   // 强制退出进程（不推荐在生产使用）
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     protected void onDestroy() {

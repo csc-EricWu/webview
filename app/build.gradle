@@ -1,30 +1,49 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.example.app"  // 这里写你项目的包名
-    compileSdk 34
-
+    namespace = "com.example.app"     // ✅ 改为等号赋值
+    compileSdk = 34                   // ✅
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId project.hasProperty('applicationId') ? project.property('applicationId') : 'com.google.webview'
-        minSdkVersion 23 // 可以兼容到 Android 6.0（覆盖率高）
-        targetSdk 34
+        if (project.hasProperty("appName")) {
+            resValue "string", "app_name", project.getProperty("appName")
+        }
+        targetSdk = 34                // ✅
+        minSdkVersion 23
         versionCode 1
         versionName "1.0"
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
     }
+
     signingConfigs {
         release {
-            storeFile file(System.getenv("KEYSTORE_FILE") ?: "../keystore/my-release-key.jks")
+            storeFile file(System.getenv("KEYSTORE_FILE") ?: "../keystore/keystore.jks")
             storePassword System.getenv("KEYSTORE_PASSWORD") ?: "888888"
-            keyAlias System.getenv("KEY_ALIAS") ?: "web-alias"
+            keyAlias System.getenv("KEY_ALIAS") ?: "mykey"
             keyPassword System.getenv("KEY_PASSWORD") ?: "888888"
         }
     }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.release // 应用 release 签名配置
-            minifyEnabled true                  // 启用代码压缩
+            signingConfig = signingConfigs.release // ✅ 改为等号赋值
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BUILD_DATE", "\"${new java.text.SimpleDateFormat('yyyy-MM-dd', Locale.US).format(new Date())}\""
         }
+        debug {
+            buildConfigField "String", "BUILD_DATE", "\"${new java.text.SimpleDateFormat('yyyy-MM-dd', Locale.US).format(new Date())}\""
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
