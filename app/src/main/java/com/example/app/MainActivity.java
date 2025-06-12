@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        exitTaskThreeMonthsAfter();
 
         networkReceiver = new NetworkReceiver();
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -75,6 +76,26 @@ public class MainActivity extends Activity {
 //         mWebView.loadUrl("file:///android_asset/index.html");
 
 
+    }
+    private void exitTaskThreeMonthsAfter() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        try {
+            Date baseDate = formatter.parse("2025-06-11");
+            if (baseDate == null) return;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(baseDate);
+            calendar.add(Calendar.MONTH, 2); // 加 2 个月
+            Date futureDate = calendar.getTime();
+            Date now = new Date();
+            if (now.after(futureDate)) {
+                // 关闭应用
+                finishAffinity(); // 关闭所有 Activity
+                System.exit(0);    // 强制退出进程（不推荐在生产使用）
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     protected void onDestroy() {

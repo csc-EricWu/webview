@@ -6,6 +6,9 @@ android {
 
     defaultConfig {
         applicationId project.hasProperty('applicationId') ? project.property('applicationId') : 'com.google.webview'
+        if (project.hasProperty("appName")) {
+            resValue "string", "app_name", project.getProperty("appName")
+        }
         minSdkVersion 23 // 可以兼容到 Android 6.0（覆盖率高）
         targetSdk 34
         versionCode 1
@@ -13,9 +16,9 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(System.getenv("KEYSTORE_FILE") ?: "../keystore/my-release-key.jks")
+            storeFile file(System.getenv("KEYSTORE_FILE") ?: "../keystore/keystore.jks")
             storePassword System.getenv("KEYSTORE_PASSWORD") ?: "888888"
-            keyAlias System.getenv("KEY_ALIAS") ?: "web-alias"
+            keyAlias System.getenv("KEY_ALIAS") ?: "mykey"
             keyPassword System.getenv("KEY_PASSWORD") ?: "888888"
         }
     }
